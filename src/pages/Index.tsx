@@ -34,7 +34,6 @@ const Index = () => {
         onViewChange={setCurrentView}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-        onAddTask={() => setIsAddFormOpen(true)}
         taskCounts={taskCounts}
       />
       

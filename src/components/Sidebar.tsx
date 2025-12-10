@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, CalendarDays, Inbox, CheckCircle2, Menu, Plus, X } from 'lucide-react';
+import { Calendar, CalendarDays, Inbox, CheckCircle2, Menu, X } from 'lucide-react';
 import { ViewType } from '@/types/task';
 import { cn } from '@/lib/utils';
 
@@ -8,7 +8,6 @@ interface SidebarProps {
   onViewChange: (view: ViewType) => void;
   isOpen: boolean;
   onToggle: () => void;
-  onAddTask: () => void;
   taskCounts: {
     today: number;
     upcoming: number;
@@ -29,7 +28,6 @@ export function Sidebar({
   onViewChange,
   isOpen,
   onToggle,
-  onAddTask,
   taskCounts,
 }: SidebarProps) {
   return (
@@ -66,19 +64,6 @@ export function Sidebar({
               >
                 <X className="w-5 h-5 text-muted-foreground" />
               </button>
-            </div>
-
-            {/* Add Task Button */}
-            <div className="p-4">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onAddTask}
-                className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground py-2.5 px-4 rounded-lg font-medium transition-colors hover:opacity-90"
-              >
-                <Plus className="w-5 h-5" />
-                Add Task
-              </motion.button>
             </div>
 
             {/* Navigation */}
