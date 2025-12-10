@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Task, ViewType } from '@/types/task';
 import { TaskItem } from './TaskItem';
-import { isToday, isFuture, parseISO } from 'date-fns';
-import { Inbox, Calendar, CalendarDays, CheckCircle2 } from 'lucide-react';
+import { AddTaskForm } from './AddTaskForm';
+import { isToday, isFuture, parseISO, format } from 'date-fns';
+import { Inbox, Calendar, CalendarDays, CheckCircle2, Plus } from 'lucide-react';
 
 interface TaskListProps {
   tasks: Task[];
@@ -10,6 +11,9 @@ interface TaskListProps {
   loading: boolean;
   onToggle: (id: string, completed: boolean) => void;
   onDelete: (id: string) => void;
+  onAddTask: (title: string, description: string, dueDate: Date | undefined) => Promise<void>;
+  isAddFormOpen: boolean;
+  onToggleAddForm: () => void;
 }
 
 const viewConfig = {
@@ -35,7 +39,7 @@ const viewConfig = {
   },
 };
 
-export function TaskList({ tasks, view, loading, onToggle, onDelete }: TaskListProps) {
+export function TaskList({ tasks, view, loading, onToggle, onDelete, onAddTask, isAddFormOpen, onToggleAddForm }: TaskListProps) {
   const config = viewConfig[view];
   const Icon = config.icon;
 
@@ -92,6 +96,33 @@ export function TaskList({ tasks, view, loading, onToggle, onDelete }: TaskListP
             <Icon className="w-12 h-12 text-muted-foreground/40 mx-auto mb-4" />
             <p className="text-muted-foreground">{config.emptyText}</p>
           </motion.div>
+        )}
+
+        {/* Add Task Form (inline) */}
+        {view !== 'completed' && (
+          <AddTaskForm
+            isOpen={isAddFormOpen}
+            onClose={onToggleAddForm}
+            onAdd={async (title, description, dueDate) => {
+              await onAddTask(title, description, dueDate);
+              onToggleAddForm();
+            }}
+          />
+        )}
+
+        {/* Add Task Button */}
+        {view !== 'completed' && !isAddFormOpen && (
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={onToggleAddForm}
+            className="flex items-center gap-2 w-full p-3 text-muted-foreground hover:text-coral transition-colors group mb-4"
+          >
+            <span className="w-5 h-5 rounded-full border-2 border-current flex items-center justify-center group-hover:bg-coral group-hover:border-coral group-hover:text-white transition-colors">
+              <Plus className="w-3 h-3" />
+            </span>
+            <span className="text-sm">Add task</span>
+          </motion.button>
         )}
 
         {/* Task list */}
