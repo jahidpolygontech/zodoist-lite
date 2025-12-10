@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { TaskList } from '@/components/TaskList';
-import { AddTaskModal } from '@/components/AddTaskModal';
 import { useTasks } from '@/hooks/useTasks';
 import { ViewType } from '@/types/task';
 import { isToday, isFuture, parseISO } from 'date-fns';
@@ -9,7 +8,7 @@ import { isToday, isFuture, parseISO } from 'date-fns';
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('inbox');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
   
   const { tasks, loading, addTask, toggleTask, deleteTask } = useTasks();
 
@@ -35,7 +34,7 @@ const Index = () => {
         onViewChange={setCurrentView}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
-        onAddTask={() => setIsModalOpen(true)}
+        onAddTask={() => setIsAddFormOpen(true)}
         taskCounts={taskCounts}
       />
       
@@ -46,14 +45,11 @@ const Index = () => {
           loading={loading}
           onToggle={toggleTask}
           onDelete={deleteTask}
+          onAddTask={handleAddTask}
+          isAddFormOpen={isAddFormOpen}
+          onToggleAddForm={() => setIsAddFormOpen(!isAddFormOpen)}
         />
       </main>
-
-      <AddTaskModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddTask}
-      />
     </div>
   );
 };
